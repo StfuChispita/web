@@ -1,1 +1,572 @@
-# web
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MatPoké Store</title>
+  <style>
+    :root {
+      --primary: #ffcb05; /* Amarillo Pokémon */
+      --secondary: #2a75bb; /* Azul Pokémon */
+      --danger: #e3350d; /* Rojo Pokébola */
+      --whatsapp: #25d366; /* Verde WhatsApp */
+      --whatsapp-dark: #128c7e;
+      --dark: #1e1e1e;
+      --light: #f4f4f9;
+      --card-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      padding-bottom: 2rem;
+    }
+
+    /* 1. LOGO Y NAVEGACIÓN PROFESIONAL */
+    header {
+      background-color: var(--danger);
+      color: white;
+      padding: 0.8rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Estilo del Logo */
+    .brand img {
+      height: 65px;
+      width: 65px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+    }
+
+    .brand h1 {
+      font-size: 1.6rem;
+      color: var(--primary);
+      text-shadow: 2px 2px #2a75bb;
+      letter-spacing: 0.5px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .country-select {
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 20px;
+      padding: 0.5rem 0.8rem;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--dark);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .header-contact-btn {
+      background-color: var(--whatsapp);
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .header-contact-btn:hover {
+      transform: scale(1.05);
+      background-color: var(--whatsapp-dark);
+    }
+
+    /* 2. BANNER PROMOCIONAL CENTRADO */
+    .hero-banner {
+      position: relative;
+      width: 100%;
+      min-height: 480px;
+      background-color: #1a1a1a;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), 
+                        url('Imagen/Pokémon.jpeg');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 2rem 1rem;
+      box-shadow: inset 0 -5px 10px rgba(0,0,0,0.2);
+    }
+
+    .hero-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      text-shadow: 2px 3px 8px rgba(0,0,0,0.9);
+      margin-bottom: 0.5rem;
+      line-height: 1.1;
+    }
+
+    .hero-date {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
+      font-style: italic;
+    }
+
+    .hero-btn {
+      background-color: var(--danger);
+      color: white;
+      padding: 0.8rem 2.2rem;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .hero-btn:hover {
+      background-color: #b32508;
+      transform: scale(1.05);
+    }
+
+    /* CONTENEDOR Y FILTROS DEL CATÁLOGO */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .category-title {
+      border-left: 5px solid var(--danger);
+      padding-left: 10px;
+      font-size: 1.4rem;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      padding: 0.4rem 1rem;
+      flex: 1;
+      min-width: 200px;
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--secondary);
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 0.95rem;
+      padding-left: 0.5rem;
+    }
+
+    .category-select {
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      padding: 0.4rem 1rem;
+      font-size: 0.95rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .category-select:focus {
+      border-color: var(--secondary);
+    }
+
+    /* 3. CATÁLOGO CON TARJETAS */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 2px solid #e0e0e0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      background-color: #fff;
+      padding: 1rem;
+    }
+
+    .card-content {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+
+    .card-tag {
+      align-self: flex-start;
+      background: #eee;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      color: #666;
+      font-weight: bold;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+    }
+
+    .price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    /* 4. BOTÓN PEDIDOS POR WHATSAPP */
+    .ws-btn {
+      width: 100%;
+      background: var(--whatsapp);
+      color: white;
+      text-decoration: none;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .ws-btn:hover {
+      background: var(--whatsapp-dark);
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #666;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 0.8rem 1rem;
+      }
+      .brand img {
+        height: 50px;
+        width: 50px;
+      }
+      .brand h1 {
+        font-size: 1.2rem;
+      }
+      .hero-banner {
+        min-height: 320px;
+      }
+      .hero-title {
+        font-size: 2.2rem;
+      }
+      .header-contact-btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.8rem;
+      }
+      .filter-controls {
+        max-width: 100%;
+        flex-direction: column;
+      }
+      .category-select {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER Y LOGO -->
+  <header>
+    <div class="brand">
+      <img src="Imagen/18a3581bd0d15de550afc88751a04751-removebg-preview.png" alt="MatPoké Store Logo" onerror="this.src='https://via.placeholder.com/65?text=Logo';">
+      <h1>MatPoké Store</h1>
+    </div>
+    
+    <div class="header-actions">
+      <select id="country-select" class="country-select" onchange="updateLocalization()">
+        <option value="PE">🇵🇪 Perú (S/.)</option>
+        <option value="US">🇺🇸 USA ($)</option>
+        <option value="MX">🇲🇽 México ($)</option>
+        <option value="ES">🇪🇸 España (€)</option>
+      </select>
+
+      <a id="general-whatsapp" href="#" target="_blank" class="header-contact-btn">
+        💬 <span id="contact-btn-text">Contactar</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- BANNER PROMOCIONAL -->
+  <section class="hero-banner">
+    <h2 class="hero-title">Cartas Pokémon</h2>
+    <p class="hero-date">¡Explora nuestro catálogo y encuentra tus cartas favoritas!</p>
+    <a href="#product-grid" class="hero-btn">Shop Now</a>
+  </section>
+
+  <!-- CATÁLOGO PRINCIPAL -->
+  <main class="container">
+    <div class="top-bar">
+      <h2 class="category-title" id="catalog-title">Catálogo Pokémon TCG</h2>
+      
+      <div class="filter-controls">
+        <select id="category-select" class="category-select" onchange="filterProducts()">
+          <option value="all" id="all-categories-option">Todas las Categorías</option>
+        </select>
+
+        <div class="search-box">
+          🔍 <input type="text" id="search-input" placeholder="Buscar carta..." oninput="filterProducts()">
+        </div>
+      </div>
+    </div>
+
+    <!-- GRID DE TARJETAS DE PRODUCTO -->
+    <div class="grid" id="product-grid"></div>
+  </main>
+
+  <!-- SCRIPTS Y LÓGICA DE PEDIDOS POR WHATSAPP -->
+  <script>
+    const PHONE_NUMBER = "51989012329"; 
+
+    const localizationData = {
+      PE: {
+        currencySymbol: "S/.",
+        rate: 1,
+        contactText: "Contactar",
+        titleText: "Catálogo Pokémon TCG",
+        allCategoriesText: "Todas las Categorías",
+        searchPlaceholder: "Buscar carta...",
+        buyText: "Pedir por WhatsApp",
+        generalMsg: "Hola, me gustaría información sobre sus productos de Pokémon TCG.",
+        noResultsText: "No se encontraron productos que coincidan con tu búsqueda. 🔍",
+        getItemMsg: (name, priceStr) => `Hola, estoy interesado en comprar: *${name}* (Precio: ${priceStr}). ¿Tienen stock disponible?`
+      },
+      US: {
+        currencySymbol: "$",
+        rate: 0.27,
+        contactText: "Contact Us",
+        titleText: "Pokémon TCG Catalog",
+        allCategoriesText: "All Categories",
+        searchPlaceholder: "Search card...",
+        buyText: "Order via WhatsApp",
+        generalMsg: "Hello, I would like information about your Pokémon TCG products.",
+        noResultsText: "No products matched your search. 🔍",
+        getItemMsg: (name, priceStr) => `Hello, I'm interested in buying: *${name}* (Price: ${priceStr}). Is it in stock?`
+      },
+      MX: {
+        currencySymbol: "$ MXN",
+        rate: 4.60,
+        contactText: "Contactar",
+        titleText: "Catálogo Pokémon TCG",
+        allCategoriesText: "Todas las Categorías",
+        searchPlaceholder: "Buscar carta...",
+        buyText: "Pedir por WhatsApp",
+        generalMsg: "Hola, me gustaría obtener información sobre sus productos de Pokémon TCG.",
+        noResultsText: "No se encontraron productos que coincidan con tu búsqueda. 🔍",
+        getItemMsg: (name, priceStr) => `Hola, me interesa comprar: *${name}* (Precio: ${priceStr}). ¿Tienen disponibilidad?`
+      },
+      ES: {
+        currencySymbol: "€",
+        rate: 0.25,
+        contactText: "Contactar",
+        titleText: "Catálogo Pokémon TCG",
+        allCategoriesText: "Todas las Categorías",
+        searchPlaceholder: "Buscar carta...",
+        buyText: "Pedir por WhatsApp",
+        generalMsg: "Hola, desearía información sobre vuestros productos de Pokémon TCG.",
+        noResultsText: "No se han encontrado productos que coincidan con tu búsqueda. 🔍",
+        getItemMsg: (name, priceStr) => `Hola, me interesa comprar: *${name}* (Precio: ${priceStr}). ¿Tenéis stock disponible?`
+      }
+    };
+
+    const products = [
+      { id: 1, category: "Cartas Sueltas", name: "Pikachu (018/091)", price: 2, img: "Imagen/Pikachu.png" },
+      { id: 2, category: "Cartas Sueltas", name: "Raichu (056/217)", price: 2, img: "Imagen/Raichu.png" },
+      { id: 6, category: "Cartas Sueltas", name: "Energia Burbujeante Rever Holo (Español)", price: 3, img: "Imagen/Energia de Agua.gif" },
+      { id: 9, category: "Cartas Sueltas", name: "Energia Magnética Rever Holo (Español)", price: 3, img: "Imagen/Energía Magnética.png" },
+      { id: 10, category: "Cartas Sueltas", name: "Kakuna Rever Holo (Español)", price: 5, img: "Imagen/Kakuna.png" },
+      { id: 11, category: "Cartas Sueltas", name: "Fennekin Rever Holo (Español)", price: 5, img: "Imagen/Fennekin.png" },
+      { id: 12, category: "Cartas Sueltas", name: "Ho-oh Rever Holo (Español)", price: 5, img: "Imagen/Ho-oh.png" },
+      { id: 13, category: "Cartas Sueltas", name: "Stunky Rever Holo (Español)", price: 5, img: "Imagen/Stunky.png" },
+      { id: 14, category: "Cartas Sueltas", name: "Watchog Rever Holo (Español)", price: 5, img: "Imagen/Watchog.png" },
+      { id: 15, category: "Cartas Sueltas", name: "Deoxys Rever Holo (Español)", price: 5, img: "Imagen/Deoxys.png" },
+      { id: 16, category: "Cartas Sueltas", name: "Xerneas Rever Holo (Español)", price: 5, img: "Imagen/Xerneas.png" },
+      { id: 17, category: "Cartas Sueltas", name: "Matiere (Español)", price: 3, img: "Imagen/Matiere.png" },
+      { id: 18, category: "Cartas Sueltas", name: "Meowstic (Español)", price: 3, img: "Imagen/Meowstic.png" },
+      { id: 19, category: "Cartas Sueltas", name: "Patrat (Español)", price: 3, img: "Imagen/Patrat.png" },
+      { id: 20, category: "Cartas Sueltas", name: "Sliggoo (Español)", price: 3, img: "Imagen/Sliggoo.png" },
+      { id: 21, category: "Cartas Sueltas", name: "Vulpix (Español)", price: 3, img: "Imagen/Vulpix.png" },
+      { id: 22, category: "Cartas Sueltas", name: "Remoraid (Español)", price: 3, img: "Imagen/Remoraid.png" },
+      { id: 23, category: "Cartas Sueltas", name: "Garbodor (Español)", price: 3, img: "Imagen/Garbodor.png" },
+      { id: 24, category: "Cartas Sueltas", name: "Delibird (Español)", price: 3, img: "Imagen/Delibird.png" },
+      { id: 25, category: "Cartas Sueltas", name: "Albado (Español)", price: 3, img: "Imagen/Albado.png" },
+      { id: 26, category: "Cartas Sueltas", name: "Golisopod (Español)", price: 3, img: "Imagen/Golisopod.png" },
+      { id: 27, category: "Cartas Sueltas", name: "Froakie (Español)", price: 3, img: "Imagen/Froakie.png" },
+      { id: 28, category: "Cartas Sueltas", name: "Metang (Español)", price: 3, img: "Imagen/Metang.png" },
+      { id: 29, category: "Cartas Sueltas", name: "Weedle (Español)", price: 3, img: "Imagen/Weedle.png" },
+      { id: 30, category: "Cartas Sueltas", name: "Bergmite (Español)", price: 3, img: "Imagen/Bergmite.png" },
+      { id: 31, category: "Cartas Sueltas", name: "Baltoy (Español)", price: 3, img: "Imagen/Baltoy.png" },
+      { id: 32, category: "Cartas Sueltas", name: "Emolga (Español)", price: 3, img: "Imagen/Emolga.png" },
+      { id: 33, category: "Cartas Sueltas", name: "Memoria Núcleo (Español)", price: 3, img: "Imagen/Memori Núcleo.png" }
+    ];
+
+    function createWhatsAppLink(phone, message) {
+      return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    }
+
+    function populateCategories() {
+      const select = document.getElementById('category-select');
+      const categories = [...new Set(products.map(p => p.category))];
+
+      categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        select.appendChild(option);
+      });
+    }
+
+    function updateLocalization() {
+      const countryCode = document.getElementById('country-select').value;
+      const config = localizationData[countryCode] || localizationData.PE;
+
+      document.getElementById('contact-btn-text').textContent = config.contactText;
+      document.getElementById('catalog-title').textContent = config.titleText;
+      document.getElementById('all-categories-option').textContent = config.allCategoriesText;
+      document.getElementById('search-input').placeholder = config.searchPlaceholder;
+
+      const generalBtn = document.getElementById('general-whatsapp');
+      generalBtn.href = createWhatsAppLink(PHONE_NUMBER, config.generalMsg);
+
+      filterProducts();
+    }
+
+    function renderProducts(items) {
+      const grid = document.getElementById('product-grid');
+      const countryCode = document.getElementById('country-select').value;
+      const config = localizationData[countryCode] || localizationData.PE;
+
+      if (items.length === 0) {
+        grid.innerHTML = `<div class="no-results">${config.noResultsText}</div>`;
+        return;
+      }
+
+      grid.innerHTML = items.map(product => {
+        const convertedPrice = (product.price * config.rate).toFixed(2);
+        const priceDisplay = `${config.currencySymbol} ${convertedPrice}`;
+        const message = config.getItemMsg(product.name, priceDisplay);
+        const wsUrl = createWhatsAppLink(PHONE_NUMBER, message);
+
+        return `
+          <div class="card">
+            <img src="${product.img}" alt="${product.name}" onerror="this.onerror=null; this.src='https://via.placeholder.com/220?text=Sin+Imagen';">
+            <div class="card-content">
+              <div>
+                <span class="card-tag">${product.category}</span>
+                <h3 style="margin-top: 5px;">${product.name}</h3>
+              </div>
+              <div>
+                <p class="price">${priceDisplay}</p>
+                <a href="${wsUrl}" target="_blank" class="ws-btn">
+                  ${config.buyText}
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterProducts() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const selectedCategory = document.getElementById('category-select').value;
+
+      const filtered = products.filter(product => {
+        const matchesQuery = product.name.toLowerCase().includes(query) || product.category.toLowerCase().includes(query);
+        const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+        
+        return matchesQuery && matchesCategory;
+      });
+
+      renderProducts(filtered);
+    }
+
+    populateCategories();
+    updateLocalization();
+  </script>
+</body>
+</html>
